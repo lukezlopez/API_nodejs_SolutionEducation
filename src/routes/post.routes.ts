@@ -5,6 +5,7 @@ import {
     getPostById,
     updatePost,
     deletePost,
+    searchPosts,
 } from '../controller.ts/post.controller'
 
 import { postSchema } from '../schema/post.schema'
@@ -17,5 +18,6 @@ router.post('/posts', validate(postSchema), createPost)
 router.get('/posts/:id', getPostById)
 router.put('/posts/:id', validate(postSchema), updatePost)
 router.delete('/posts/:id', deletePost)
+router.get('/posts/search', searchPosts);
 
 export default router
