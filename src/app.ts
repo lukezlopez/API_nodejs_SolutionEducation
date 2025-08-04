@@ -1,3 +1,12 @@
-import fastify from 'fastify';
+import express from 'express'
+import postRoutes from './routes/post.routes'
+import dotenv from 'dotenv'
 
-export const app = fastify();
+dotenv.config()
+
+const app = express()
+
+app.use(express.json())
+app.use('/api', postRoutes)
+
+export default app
