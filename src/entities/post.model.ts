@@ -4,6 +4,7 @@ import { IPost } from './models/post.interface'
 const postSchema = new Schema<IPost>({
     title: { type: String, required: true },
     content: { type: String },
+    author: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
 })
 
