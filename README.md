@@ -6,14 +6,14 @@ Uma API RESTful para um sistema de blog, onde docentes podem criar, editar e exc
 
 ## 📦 Tecnologias Utilizadas
 
-* Node.js
-* Express
-* MongoDB (via Mongoose)
-* TypeScript
-* Zod (validação)
-* Jest + Supertest (testes)
-* Docker
-* GitHub Actions (CI/CD)
+- Node.js  
+- Express  
+- MongoDB (via Mongoose)  
+- TypeScript  
+- Zod (validação)  
+- Jest + Supertest (testes)  
+- Docker  
+- GitHub Actions (CI/CD)  
 
 ---
 
@@ -21,9 +21,9 @@ Uma API RESTful para um sistema de blog, onde docentes podem criar, editar e exc
 
 ### Pré-requisitos
 
-* Node.js 18+
-* Docker e Docker Compose (opcional)
-* MongoDB local ou cloud
+- Node.js 18+  
+- Docker e Docker Compose (opcional)  
+- MongoDB local ou cloud  
 
 ### Clone o repositório
 
@@ -50,7 +50,7 @@ npm run dev
 │   ├── entities
 │   │   └── post.model.ts
 │   ├── middlewares
-│   │   └── validate.ts
+│   │   └── authenticate.ts
 │   ├── routes
 │   │   └── post.routes.ts
 │   ├── schema
@@ -74,15 +74,15 @@ npm run dev
 
 ### GET /posts
 
-Retorna todos os posts cadastrados.
+Retorna todos os posts cadastrados. Disponível para alunos e professores.
 
-### GET /posts/\:id
+### GET /posts/:id
 
-Retorna um post específico pelo ID.
+Retorna um post específico pelo ID. Disponível para alunos e professores.
 
 ### POST /posts
 
-Cria uma nova postagem.
+Cria uma nova postagem. Apenas professores autenticados podem acessar.
 
 **Body:**
 
@@ -94,20 +94,47 @@ Cria uma nova postagem.
 }
 ```
 
-### PUT /posts/\:id
+### PUT /posts/:id
 
-Atualiza uma postagem existente.
+Atualiza uma postagem existente. Apenas professores autenticados podem acessar.
 
-### DELETE /posts/\:id
+### DELETE /posts/:id
 
-Remove uma postagem pelo ID.
+Remove uma postagem pelo ID. Apenas professores autenticados podem acessar.
 
 ### GET /posts/search?q=termo
 
-Busca postagens por palavras-chave no título ou conteúdo.
+Busca postagens por palavras-chave no título ou conteúdo. Disponível para todos.
 
 ---
 
+## 🔐 Autenticação e Controle de Acesso
+
+Para diferenciar professores e alunos na aplicação, implementamos um sistema simples de autenticação via tokens no header HTTP `Authorization`. 
+
+- **Tokens válidos**:  
+  - `professor-token` — Permite criar, editar e excluir postagens.  
+  - `aluno-token` — Permite apenas visualizar e buscar postagens.
+
+- **Como usar**:  
+  Inclua no header da requisição:  
+  `Authorization: Bearer professor-token` (ou `aluno-token` conforme o caso)
+
+- **Restrições**:  
+  - Endpoints de criação, edição e exclusão exigem o token de professor.  
+  - Alunos (token aluno-token) e requisições sem token ou com token inválido só podem acessar as operações de leitura (GET).
+
+---
+
+## 🧪 Testes
+
+Execute os testes com cobertura:
+
+```bash
+npm run test:coverage
+```
+
+---
 
 ## 🐳 Usando Docker
 
@@ -123,13 +150,12 @@ A aplicação estará disponível em `http://localhost:3000`
 
 ## 🔁 CI/CD com GitHub Actions
 
-* Workflow de CI/CD configurado em `.github/workflows/ci.yml`
-* Executa:
-
-  * Instalação de dependências
-  * Execução dos testes
-  * Verificação de cobertura
-  * Linter
+- Workflow de CI/CD configurado em `.github/workflows/ci.yml`  
+- Executa:  
+  - Instalação de dependências  
+  - Execução dos testes  
+  - Verificação de cobertura  
+  - Linter  
 
 ---
 
@@ -137,24 +163,34 @@ A aplicação estará disponível em `http://localhost:3000`
 
 A aplicação segue uma estrutura MVC:
 
-* **Model:** representação dos dados (Mongoose)
-* **Controller:** lógica dos endpoints
-* **Routes:** definição de rotas e middlewares
-* **Schema:** validação com Zod
-* **Middlewares:** validações reutilizáveis
+- **Model:** representação dos dados (Mongoose)  
+- **Controller:** lógica dos endpoints  
+- **Routes:** definição de rotas e middlewares  
+- **Schema:** validação com Zod  
+- **Middlewares:** validações reutilizáveis (ex: autenticação)  
 
 ---
 
 ## 🧾 Requisitos Atendidos
 
-✅ CRUD completo de postagens
-✅ Validação de dados com Zod
-✅ Persistência com MongoDB
-✅ Testes automatizados com cobertura
-✅ Containerização com Docker
-✅ CI/CD com GitHub Actions
-✅ Documentação técnica
-✅ Endpoint de busca implementado
+✅ CRUD completo de postagens  
+✅ Validação de dados com Zod  
+✅ Persistência com MongoDB  
+✅ Testes automatizados com cobertura  
+✅ Containerização com Docker  
+✅ CI/CD com GitHub Actions  
+✅ Documentação técnica  
+✅ Endpoint de busca implementado  
+✅ Autenticação simples para controle de acesso professor/aluno  
+
+---
+
+## ⚠️ Dificuldades Encontradas
+
+- Implementar autenticação simples e controlar permissões de acesso sem sistema completo de usuários.  
+- Integrar validação Zod com Mongoose e lidar com erros de validação.  
+- Configurar Docker e evitar problemas durante o build e execução do container.  
+- Garantir a cobertura mínima de testes automatizados, focando nas operações críticas.  
 
 ---
 
@@ -166,9 +202,4 @@ Gravação em vídeo demonstrando o funcionamento da aplicação (incluir link a
 
 ## 🧠 Experiências e Desafios
 
-* Integração entre validação (Zod) e MongoDB exigiu adaptação no controle de erros.
-* Garantir cobertura de testes significativa com Jest e Supertest.
-* Configuração de Dockerfile e workflows do GitHub Actions para automação de testes e build.
-* Manter estrutura modularizada e organizada usando boas práticas com TypeScript e Express.
-
----
+Este projeto possibilitou o aprendizado de várias tecnologias e práticas modernas, como validação robusta, testes automatizados e pipeline CI/CD, além de reforçar conceitos de segurança básica via autenticação token.

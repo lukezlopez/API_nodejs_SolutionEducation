@@ -1,23 +1,21 @@
-import { Router } from 'express'
+import { Router } from 'express';
 import {
     getPosts,
-    createPost,
     getPostById,
+    createPost,
     updatePost,
-    deletePost,
-    searchPosts,
-} from '../controller.ts/post.controller'
-
-import { postSchema } from '../schema/post.schema'
-import { validate } from '../middlewares/validate'
+    deletePost
+} from '../controller.ts/post.controller';
+import { authenticate } from '../middlewares/auth';
+import { authorize } from '../middlewares/auth';
 
 const router = Router();
 
-router.get('/posts', getPosts)
-router.post('/posts', validate(postSchema), createPost)
-router.get('/posts/:id', getPostById)
-router.put('/posts/:id', validate(postSchema), updatePost)
-router.delete('/posts/:id', deletePost)
-router.get('/posts/search', searchPosts);
+router.get('/posts', authenticate, authorize(['professor', 'aluno']), getPosts);
+router.get('/posts/:id', authenticate, authorize(['professor', 'aluno']), getPostById);
 
-export default router
+router.post('/posts', authenticate, authorize(['professor']), createPost);
+router.put('/posts/:id', authenticate, authorize(['professor']), updatePost);
+router.delete('/posts/:id', authenticate, authorize(['professor']), deletePost);
+
+export default router;
