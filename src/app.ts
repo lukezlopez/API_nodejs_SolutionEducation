@@ -1,12 +1,21 @@
-import express from 'express'
-import postRoutes from './routes/post.routes'
-import dotenv from 'dotenv'
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import postRoutes from "./routes/post.routes";
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
 
-app.use(express.json())
-app.use('/api', postRoutes)
+app.use(
+    cors({
+        origin: "*",
+    })
+);
 
-export default app
+app.use(express.json());
+
+// ✅ Suas rotas da API
+app.use("/api", postRoutes);
+
+export default app;
