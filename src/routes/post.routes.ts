@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router } from 'express';
 import {
     getPosts,
     getPostById,
@@ -6,19 +6,18 @@ import {
     updatePost,
     deletePost,
     searchPosts
-} from '../controller.ts/post.controller'
-import { authenticate } from '../middlewares/auth'
-import { authorize } from '../middlewares/auth'
+} from '../controller/post.controller';
 
-const router = Router()
+import { authenticate, authorize } from '../middlewares/jwtAuth';
 
-router.get('/posts', authenticate, authorize(['professor', 'aluno']), getPosts)
-router.get('/posts/search', searchPosts)
-router.get('/posts/:id', authenticate, authorize(['professor', 'aluno']), getPostById)
+const router = Router();
 
+router.get('/posts', authenticate, authorize(['professor', 'aluno']), getPosts);
+router.get('/posts/search', searchPosts);
+router.get('/posts/:id', authenticate, authorize(['professor', 'aluno']), getPostById);
 
-router.post('/posts', authenticate, authorize(['professor']), createPost)
-router.put('/posts/:id', authenticate, authorize(['professor']), updatePost)
-router.delete('/posts/:id', authenticate, authorize(['professor']), deletePost)
+router.post('/posts', authenticate, authorize(['professor']), createPost);
+router.put('/posts/:id', authenticate, authorize(['professor']), updatePost);
+router.delete('/posts/:id', authenticate, authorize(['professor']), deletePost);
 
-export default router
+export default router;
